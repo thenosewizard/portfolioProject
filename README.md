@@ -1,2 +1,4 @@
-# portfolioProject
-a project for portfolio one
+# PortfolioProject
+a project for portfolio 1
+
+
