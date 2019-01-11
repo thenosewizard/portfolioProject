@@ -1,9 +1,11 @@
 #from django.conf import settings
 from django.db import models
 from django.urls import reverse
+from django.contrib.auth.models import AbstractUser
 #from django.utils import timezone
 #from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.validators import MaxValueValidator
+
 #from django.utils.translation import ugettext as _
 #from django.utils.timezone import now
 
@@ -34,18 +36,15 @@ class subTopic(models.Model):
 class Quiz(models.Model):
     quiz_name = models.CharField(max_length=50,  verbose_name = ("Quiz name"))
     description = models.CharField(max_length=500 , null = True)
-    topic = models.ForeignKey(Subject,on_delete=models.CASCADE, null = True)
+    topic = models.ForeignKey(Subject,on_delete=models.SET_NULL, null = True)
     date_created = models.DateField(auto_now = True)
     pass_mark = models.SmallIntegerField( blank=True, null=True, verbose_name = ("Pass mark"), validators = [MaxValueValidator(100)]) # validates the maximum mark set
+
 
     class Meta:
         pass
 
-
-    #define a function here that get how many qns the user got correct
-    def result(self, ):
-        pass
-
+    #string that can be used in the admin interface
     def __str__(self):
         return f'{self.quiz_name}'
 
@@ -54,7 +53,7 @@ class Quiz(models.Model):
         
 
 class Question(models.Model):
-    sub_category = models.ForeignKey(subTopic, on_delete = models.CASCADE)
+    sub_category = models.ForeignKey(subTopic, on_delete = models.SET_NULL, null = True)
     question_text = models.CharField(max_length=500, verbose_name = ("Question"))
     quiz_assigned = models.ManyToManyField(Quiz)
 
@@ -76,7 +75,7 @@ class Question(models.Model):
         
 
 class Answer (models.Model):
-    related_question = models.name = models.ForeignKey(Question, on_delete=models.CASCADE)
+    related_question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content_answer = models.CharField(max_length=500, help_text='Enter answer text here to display')
     correctAns =  models.BooleanField(blank=False, default = False , help_text ="Set if this is the correct Answer")
 
@@ -88,28 +87,44 @@ class Answer (models.Model):
         return self.content_answer
 
 
-class TrackProgess(models.Model):
-    """Model definition for MODELNAME.
-    This model is to save the score of users taing the test
-    So that we may calucate and do stuff with their scores
-    """
+class Student(models.Model):
+    """Model definition for Student."""
+    # TODO: Define fields here
 
-    
-    
+    #placeholer name until auth is added
+    student_name = models.CharField(max_length=50, null = True)
+    assigned_quizzes = models.ManyToManyField(Quiz, null = True)
+
     class Meta:
-        """Meta definition for MODELNAME."""
-
-        verbose_name = 'MODELNAME'
-        verbose_name_plural = 'MODELNAMEs'
-
-    def __str__(self):
-        """Unicode representation of MODELNAME."""
         pass
 
+    def get_absolute_url(self):
+        return reverse('student-detail', args=[str(self.id)])
 
-#user
-#report
-#store progess of users (profile)
-#sitting mangaer?
+    def __str__(self):
+        """Unicode representation of Student."""
+        return f'{self.student_name}'
+
+
+class Finished_quiz(models.Model):
+    """Model definition for Finished_quiz."""
+
+    # TODO: Define fields here
+
+    #student who did the quiz
+    #quizzes that they have done
+    #score for that quiz
+
+
+    class Meta:
+        """Meta definition for Finished_quiz."""
+
+        verbose_name = 'Finished_quiz'
+        verbose_name_plural = 'Finished_quizs'
+
+    #def __str__(self):
+    #    """Unicode representation of Finished_quiz."""
+    #    pass
+
 
 
