@@ -10,8 +10,14 @@ from django.core.validators import MaxValueValidator
 #from django.utils.timezone import now
 
 
+class User(AbstractUser):
+    name = models.CharField(max_length=50)
+    is_teacher = models.BooleanField(default = False)
+    is_student = models.BooleanField( default = False)
 
 
+    def __str__(self):
+        return f'{self.name} (Student: {self.is_student}) (Teacher: {self.is_teacher})'
 
 
 # Create your models here.
@@ -90,10 +96,10 @@ class Answer (models.Model):
 class Student(models.Model):
     """Model definition for Student."""
     # TODO: Define fields here
-
+    studentUser = models.OneToOneField(User, on_delete=models.CASCADE, null = True)
     #placeholer name until auth is added
-    student_name = models.CharField(max_length=50, null = True)
     assigned_quizzes = models.ManyToManyField(Quiz)
+    ranking = models.IntegerField(null = True)
 
     class Meta:
         pass
@@ -127,6 +133,7 @@ class Finished_quiz(models.Model):
 
 #Added to show a report of every student 
 class Report(models.Model):
+    #Added to show a report of every student 
     """Model definition for Report."""
 
     # TODO: Define fields here
