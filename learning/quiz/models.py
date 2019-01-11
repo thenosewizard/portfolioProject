@@ -110,11 +110,10 @@ class Finished_quiz(models.Model):
     """Model definition for Finished_quiz."""
 
     # TODO: Define fields here
-
-    #student who did the quiz
-    #quizzes that they have done
-    #score for that quiz
-
+    student = models.ForeignKey(Student, on_delete=models.CASCADE, null = True)
+    score = models.IntegerField(default = 0)
+    quiz_taken = models.ForeignKey(Quiz,on_delete=models.CASCADE, null = True)
+    date_taken  = models.DateField( auto_now=True)
 
     class Meta:
         """Meta definition for Finished_quiz."""
@@ -122,9 +121,8 @@ class Finished_quiz(models.Model):
         verbose_name = 'Finished_quiz'
         verbose_name_plural = 'Finished_quizs'
 
-    #def __str__(self):
-    #    """Unicode representation of Finished_quiz."""
-    #    pass
-
+    def __str__(self):
+        """Unicode representation of Finished_quiz."""
+        return f'{self.student} {self.quiz_taken} ({self.score})'
 
 
