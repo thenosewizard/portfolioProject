@@ -24,6 +24,7 @@ from django.urls import include
 
 urlpatterns += [
     path('quiz/', include('quiz.urls')),
+    path('accounts/', include('django.contrib.auth.urls'))
 ]
 
 # redirecting requests to this path

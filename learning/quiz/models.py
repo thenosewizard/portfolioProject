@@ -93,7 +93,7 @@ class Student(models.Model):
 
     #placeholer name until auth is added
     student_name = models.CharField(max_length=50, null = True)
-    assigned_quizzes = models.ManyToManyField(Quiz, null = True)
+    assigned_quizzes = models.ManyToManyField(Quiz)
 
     class Meta:
         pass
@@ -105,7 +105,7 @@ class Student(models.Model):
         """Unicode representation of Student."""
         return f'{self.student_name}'
 
-
+#saves score and date when the quiz is finished
 class Finished_quiz(models.Model):
     """Model definition for Finished_quiz."""
 
@@ -125,4 +125,20 @@ class Finished_quiz(models.Model):
         """Unicode representation of Finished_quiz."""
         return f'{self.student} {self.quiz_taken} ({self.score})'
 
+#Added to show a report of every student 
+class Report(models.Model):
+    """Model definition for Report."""
 
+    # TODO: Define fields here
+
+    class Meta:
+        #Added to show a report of every student 
+        """Meta definition for Report."""
+
+        verbose_name = 'Report'
+        verbose_name_plural = 'Reports'
+
+
+    def __str__(self):
+        """Unicode representation of Report."""
+        pass
