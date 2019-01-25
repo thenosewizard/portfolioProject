@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from . import views
@@ -7,6 +7,8 @@ from quiz.models import *
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView
 from quiz.forms import QuestionForm
+from django.shortcuts import get_list_or_404, get_object_or_404
+from django.http import HttpResponseRedirect
 #from quiz.models import *
 
 
@@ -85,10 +87,10 @@ class QuestionQuizDetailView(DetailView):
     template_name = "quiz/question_detail.html"
 
     def get(self , request, *args, **kwargs):
-        pk = self.kwargs.get(self.pk_url_kwarg, None)
-        ques = Question.objects.get(pk = pk)
         # creating the form here
         form = QuestionForm()
+        pk = self.kwargs.get(self.pk_url_kwarg, None)
+        ques = Question.objects.get(pk = pk)
         context = {'question_select': ques, 'form': form}
         return self.render_to_response(context)
     
@@ -97,17 +99,20 @@ class QuestionQuizDetailView(DetailView):
         form = QuestionForm(request.POST)
         if form.is_valid():
             QuestionPost = form.save(commit= False)
-            QuestionPost.user = request.user.student
+            QuestionPost.user = request.user.student    
+            QuestionPost.questionDone = get_object_or_404(Question, pk= self.kwargs['pk'])
             QuestionPost.save()
             answer = form.cleaned_data['post']
             form = QuestionForm()
         arg = {'form': form, 'answer': answer}
         return render(request, self.template_name, arg)
-
+        #return HttpResponseRedirect(reverse('question-list'))
     #def get_data(self, request):
     #    return render(request, self.template_name, {'form':form})
     
-     
+class ResultDetailView(DetailView):
+    pass
+
 
         
 

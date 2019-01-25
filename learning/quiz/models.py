@@ -130,7 +130,34 @@ class Summary(models.Model):
 
 class QuestionPost(models.Model):
     post = models.CharField(max_length=50)
+    quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE, null =True)
+    questionDone = models.ForeignKey(Question, on_delete = models.CASCADE , null = True)
     user = models.ForeignKey(Student, on_delete = models.CASCADE)
+
+    def check_correct(self, guess):
+        got_ans = QuestionPost.objects.get(pk = guess)
+        ans = got_ans.post
+        ques = Question.objects.get(pk = got_ans.questionDone.id)
+        answers = ques.answer_set.all()
+
+        count = 0
+        for i in range(len(answers)):
+            if ans == answers[i].content_answer and answers[i].correctAns == True:
+                count +=1
+
+        if count == 0:
+            return False
+        else:
+            return True
+            
+        
+
+    def __str__(self):
+       return f' Quiz: {self.quiz} Question: {self.questionDone} Ans:({self.post})'
+
+    
+    
+    
 
 #Added to show a report of every student 
 class Report(models.Model):

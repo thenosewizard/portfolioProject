@@ -3,6 +3,7 @@ from quiz.views import StudentQuizListView, StudentQuizDetailView, QuestionQuizL
 
 from . import views
 
+
 urlpatterns = [
      path('', views.index, name= "index"),
      path('myquizzes/', views.StudentQuizListView.as_view(), name = "quiz-list"),
