@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div>
+    {{question_select.question_text}}
+    <ol>
+        <!--Printing out the answers-->
+        {% for answer in question_select.answer_set.all%}
+        <li>
+             <a href="" >{{ answer.content_answer }}</a>
+        </li>
+        {%endfor%}
+    </ol>
+    <form method = "post">
+        {%  csrf_token  %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+{% endblock content %}

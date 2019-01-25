@@ -1,5 +1,6 @@
 #from django.conf import settings
 from django.db import models
+from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 #from django.utils import timezone
@@ -9,14 +10,6 @@ from django.core.validators import MaxValueValidator
 #from django.utils.translation import ugettext as _
 #from django.utils.timezone import now
 
-
-class User(AbstractUser):
-    is_teacher = models.BooleanField(default = False)
-    is_student = models.BooleanField( default = False)
-
-
-    def __str__(self):
-        return f'{self.first_name} (Student: {self.is_student}) (Teacher: {self.is_teacher})'
 
 
 # Create your models here.
@@ -55,7 +48,9 @@ class Quiz(models.Model):
 
     def get_absolute_url(self):
         return reverse("quiz-detail", args=[str(self.id)])
-        
+
+    
+    
 
 class Question(models.Model):
     sub_category = models.ForeignKey(subTopic, on_delete = models.SET_NULL, null = True)
@@ -77,6 +72,8 @@ class Question(models.Model):
 
     def get_absolute_url(self):
         return reverse("question-detail", args=[str(self.id)])
+    
+  
         
 
 class Answer (models.Model):
@@ -95,7 +92,7 @@ class Answer (models.Model):
 class Student(models.Model):
     """Model definition for Student."""
     # TODO: Define fields here
-    studentUser = models.OneToOneField(User, on_delete=models.CASCADE, null = True)
+    studentUser = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null = True)
     #placeholer name until auth is added
     assigned_quizzes = models.ManyToManyField(Quiz)
     ranking = models.IntegerField(null = True)
@@ -109,6 +106,7 @@ class Student(models.Model):
     def __str__(self):
         """Unicode representation of Student."""
         return f'{self.studentUser.first_name}'
+
 
 #saves score and date when the quiz is finished
 class Summary(models.Model):
@@ -129,6 +127,10 @@ class Summary(models.Model):
     def __str__(self):
         """Unicode representation of Finished_quiz."""
         return f'{self.student} {self.quiz_taken} ({self.score})'
+
+class QuestionPost(models.Model):
+    post = models.CharField(max_length=50)
+    user = models.ForeignKey(Student, on_delete = models.CASCADE)
 
 #Added to show a report of every student 
 class Report(models.Model):

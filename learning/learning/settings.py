@@ -124,5 +124,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 #redirects user to home page once sucessfully logged in 
 LOGIN_REDIRECT_URL = '/'
-
-AUTH_USER_MODEL = 'quiz.User'
