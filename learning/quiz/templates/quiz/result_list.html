@@ -11,11 +11,11 @@
 
 <h1>Student profile</h1>
 {% if result_list %}
-    <li>
-        {% for student in result_list%}
-        <a href="{{student.get_absolute_url}}" >{{student.student}}</a>
-        {%endfor%}
-    </li>
+    {% for student in result_list%}
+        <li>
+            <a href="{{student.get_absolute_url}}" >{{student.quiz}}</a>
+        </li>
+    {%endfor%}
 {% else %}
 <p>There are no summaries avalaible</p>
 {% endif %}

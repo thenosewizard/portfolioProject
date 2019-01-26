@@ -4,8 +4,11 @@ from django.conf import settings
 from django.urls import reverse
 from django.contrib.auth.models import AbstractUser
 #from django.utils import timezone
-#from django.core.exceptions import ValidationError, ImproperlyConfigured
+from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.validators import MaxValueValidator
+import csv
+from django.http import HttpResponse
+from django.core.exceptions import PermissionDenied
 
 #from django.utils.translation import ugettext as _
 #from django.utils.timezone import now
@@ -96,10 +99,16 @@ class Student(models.Model):
     #placeholer name until auth is added
     assigned_quizzes = models.ManyToManyField(Quiz)
     ranking = models.IntegerField(null = True)
+    age = models.IntegerField(null = True)
+    travelDuration = models.IntegerField(null = True)
+    siteTimeDuration = models.IntegerField(null= True)
+    cca = models.BooleanField(null = True)
+    absence = models.IntegerField(null = True)
+    passed = models.IntegerField(null = True)
 
     class Meta:
         pass
-
+    
     def get_absolute_url(self):
         return reverse('student-detail', args=[str(self.id)])
 
@@ -116,7 +125,7 @@ class Summary(models.Model):
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null = True)
     quiz = models.ForeignKey(Quiz, on_delete =  models.CASCADE, null = True)
     score = models.IntegerField(default = 0)
-    date_taken  = models.DateField( auto_now=True)
+    date_taken  = models.DateField(auto_now=True)
 
     class Meta:
         """Meta definition for Finished_quiz."""
@@ -126,18 +135,29 @@ class Summary(models.Model):
 
     def get_totalScore(self):
         count = 0
-        all_qns = Summary.questions.all()
-        for i in range(all_qns):
-            if all_qns[i].check_correct() == True:
+        all_qns = self.questionpost_set.all()
+        for i in range(len(all_qns)):
+            if all_qns[i].check_correct(all_qns[i].id) == True:
                 count += 1
+        self.score = count
         return count
+    
+    def check_passed(self):
+        check_quiz = self.quiz
+        passMark = check_quiz.pass_mark
+        if passMark > self.get_totalScore():
+            return False
+        else:
+            self.student.passed += 1
+            self.student.save()
+            return True
 
     def get_absolute_url(self):
         return reverse("result-detail", args=[str(self.id)])
     
     def __str__(self):
         """Unicode representation of Finished_quiz."""
-        return f'{self.student}'
+        return f'{self.student} [{self.quiz}]'
         
 
 
@@ -163,6 +183,12 @@ class QuestionPost(models.Model):
         else:
             return True
 
+    #def save(self, *args, **kwargs):
+
+     #   if QuestionPost.objects.get(Question.id).exists() and not self.pk:
+      #      raise ValidationError('There can only be one Questionpost obj')
+       # return super(QuestionPost, self).save(*args, **kwargs)
+
     def __str__(self):
        return f'Question: {self.questionDone} Ans:({self.post})'
             
@@ -176,7 +202,6 @@ class Report(models.Model):
     """Model definition for Report."""
 
     # TODO: Define fields here
-
     class Meta:
         #Added to show a report of every student 
         """Meta definition for Report."""

@@ -10,6 +10,7 @@ from quiz.forms import QuestionForm
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.http import HttpResponseRedirect
 #from quiz.models import *
+from quiz.admin import *
 
 
 # Create your views here.
@@ -37,8 +38,6 @@ def register(request):
 
 # there are class based views
 # there are function based views
-
-
 
 # create student view
 # create teacher view 
@@ -85,7 +84,6 @@ class QuestionQuizListView(ListView):
 class QuestionQuizDetailView(DetailView):
     model = Question
     template_name = "quiz/question_detail.html"
-
     def get(self , request, *args, **kwargs):
         # creating the form here
         form = QuestionForm()
@@ -104,17 +102,23 @@ class QuestionQuizDetailView(DetailView):
             current_student = self.request.user.student
             student = Student.objects.get(pk = current_student.id)
 
-            #need to filter the quiz
-            all_summary = Summary.objects.filter(student = student)
-            actual_summary = all_summary.get(quiz = ques.quiz_assigned.id)
-            actual_summary.quiz = ques.quiz_assigned
+            #getting the student
+            try:
+                all_summary = Summary.objects.filter(student = student)
+                actual_summary = all_summary.get(quiz = ques.quiz_assigned.id)
+                actual_summary.quiz = ques.quiz_assigned
+            except:
+                actual_summary = Summary(student = current_student, quiz = ques.quiz_assigned)
+                actual_summary.save()
+
+            #getting the quiz
+
+            #saving the form
             QuestionPost = form.save(commit= False)
             QuestionPost.user = request.user.student
             QuestionPost.record = actual_summary
             QuestionPost.questionDone = get_object_or_404(Question, pk= self.kwargs['pk'])
             QuestionPost.save()
-
-
 
             answer = form.cleaned_data['post']
             form = QuestionForm()
@@ -135,20 +139,16 @@ class ResultDetailView(DetailView):
     model = Summary
     context_object_name = "result_detail"
     template_name = 'quiz/result_detail.html'
-    
-    def get_queryset(self, **kwargs):
-        return Summary.objects.all()
 
     # we use get_context_data
     def get_context_data(self, **kwargs):
         student = self.request.user.student
         get_student = Summary.objects.get(pk = student.id)
         context = super(ResultDetailView,self).get_context_data(**kwargs)
-        queryset = get_student
-        context["result_info"] = queryset 
+        queryset = get_student.get_totalScore()
+        context["result_score"] = queryset 
         return context
     
-
 
 
         
