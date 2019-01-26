@@ -10,10 +10,10 @@
 {{user.is_student}}
 
 <h1>Student profile</h1>
-{% if student_list %}
+{% if result_list %}
     <li>
-        {% for student in student_list%}
-        <a href="" >{{student.student}}</a>
+        {% for student in result_list%}
+        <a href="{{student.get_absolute_url}}" >{{student.student}}</a>
         {%endfor%}
     </li>
 {% else %}

@@ -98,10 +98,24 @@ class QuestionQuizDetailView(DetailView):
         #pk = self.kwargs.get(self.pk_url_kwarg, None)
         form = QuestionForm(request.POST)
         if form.is_valid():
+            pk = self.kwargs.get(self.pk_url_kwarg, None)
+            ques = Question.objects.get(pk = pk)
+            #getting the quiz
+            current_student = self.request.user.student
+            student = Student.objects.get(pk = current_student.id)
+
+            #need to filter the quiz
+            all_summary = Summary.objects.filter(student = student)
+            actual_summary = all_summary.get(quiz = ques.quiz_assigned.id)
+            actual_summary.quiz = ques.quiz_assigned
             QuestionPost = form.save(commit= False)
-            QuestionPost.user = request.user.student    
+            QuestionPost.user = request.user.student
+            QuestionPost.record = actual_summary
             QuestionPost.questionDone = get_object_or_404(Question, pk= self.kwargs['pk'])
             QuestionPost.save()
+
+
+
             answer = form.cleaned_data['post']
             form = QuestionForm()
         arg = {'form': form, 'answer': answer}
@@ -110,8 +124,31 @@ class QuestionQuizDetailView(DetailView):
     #def get_data(self, request):
     #    return render(request, self.template_name, {'form':form})
     
+
+#for teachers
+class ResultListView(ListView):
+    model = Summary
+    context_object_name = "result_list"
+    template_name ='quiz/result_list.html'
+
 class ResultDetailView(DetailView):
-    pass
+    model = Summary
+    context_object_name = "result_detail"
+    template_name = 'quiz/result_detail.html'
+    
+    def get_queryset(self, **kwargs):
+        return Summary.objects.all()
+
+    # we use get_context_data
+    def get_context_data(self, **kwargs):
+        student = self.request.user.student
+        get_student = Summary.objects.get(pk = student.id)
+        context = super(ResultDetailView,self).get_context_data(**kwargs)
+        queryset = get_student
+        context["result_info"] = queryset 
+        return context
+    
+
 
 
         

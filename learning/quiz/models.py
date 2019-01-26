@@ -55,7 +55,7 @@ class Quiz(models.Model):
 class Question(models.Model):
     sub_category = models.ForeignKey(subTopic, on_delete = models.SET_NULL, null = True)
     question_text = models.CharField(max_length=500, verbose_name = ("Question"))
-    quiz_assigned = models.ManyToManyField(Quiz)
+    quiz_assigned = models.ForeignKey(Quiz, on_delete = models.CASCADE, null = True)
 
     #checks if the ans is correct
     def check_correct(self, guessed):
@@ -109,28 +109,41 @@ class Student(models.Model):
 
 
 #saves score and date when the quiz is finished
+
 class Summary(models.Model):
     """Model definition for Finished_quiz."""
-
     # TODO: Define fields here
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null = True)
+    quiz = models.ForeignKey(Quiz, on_delete =  models.CASCADE, null = True)
     score = models.IntegerField(default = 0)
-    quiz_taken = models.ForeignKey(Quiz,on_delete=models.CASCADE, null = True)
     date_taken  = models.DateField( auto_now=True)
 
     class Meta:
         """Meta definition for Finished_quiz."""
 
         verbose_name = 'Finished_quiz'
-        verbose_name_plural = 'Finished_quizs'
+        verbose_name_plural = 'Finished_quizzes'
 
+    def get_totalScore(self):
+        count = 0
+        all_qns = Summary.questions.all()
+        for i in range(all_qns):
+            if all_qns[i].check_correct() == True:
+                count += 1
+        return count
+
+    def get_absolute_url(self):
+        return reverse("result-detail", args=[str(self.id)])
+    
     def __str__(self):
         """Unicode representation of Finished_quiz."""
-        return f'{self.student} {self.quiz_taken} ({self.score})'
+        return f'{self.student}'
+        
+
 
 class QuestionPost(models.Model):
     post = models.CharField(max_length=50)
-    quiz = models.ForeignKey(Quiz, on_delete = models.CASCADE, null =True)
+    record = models.ForeignKey(Summary, on_delete = models.CASCADE, null =True)
     questionDone = models.ForeignKey(Question, on_delete = models.CASCADE , null = True)
     user = models.ForeignKey(Student, on_delete = models.CASCADE)
 
@@ -149,13 +162,11 @@ class QuestionPost(models.Model):
             return False
         else:
             return True
-            
-        
 
     def __str__(self):
-       return f' Quiz: {self.quiz} Question: {self.questionDone} Ans:({self.post})'
+       return f'Question: {self.questionDone} Ans:({self.post})'
+            
 
-    
     
     
 
