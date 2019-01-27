@@ -10,11 +10,10 @@
 {{user.is_student}}
 
 <h1>Student profile</h1>
-{% if result_list %}
-{% for student in result_list%}
-    Quiz taken: {{student.student}} 
+{% if object_list %}
+{% for s in object_list%}
         <li>
-            <a href="{{student.get_absolute_url}}" >{{student.quiz}}</a>
+            <a href="{{s.get_absolute_url}}" >{{s}}</a>
         </li>
         <br>
     {%endfor%}

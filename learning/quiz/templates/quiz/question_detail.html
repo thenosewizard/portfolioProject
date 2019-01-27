@@ -16,9 +16,11 @@
     </ol>
     <form method = "post">
         {%  csrf_token  %}
-        {{ form.as_p }}
+        {{ form.as_p }} 
         <button type="submit">Submit</button>
     </form>
+    <br><br>
+    <button><a href="{{ question_select.quiz_assigned.get_absolute_url }}">Back to questions</a></button>
 </div>
 
 {% endblock content %}

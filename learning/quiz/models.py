@@ -98,6 +98,18 @@ class Student(models.Model):
     studentUser = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null = True)
     #placeholer name until auth is added
     assigned_quizzes = models.ManyToManyField(Quiz)
+
+    #defining field for gender
+    M = 'M'
+    F = 'F'
+
+    GENDER_SELECT =  (
+        (M, 'Male'), 
+        (F, 'Female'),
+    )
+
+    gender = models.CharField(max_length = 1, choices = GENDER_SELECT, default = M)
+
     ranking = models.IntegerField(null = True)
     age = models.IntegerField(null = True)
     travelDuration = models.IntegerField(null = True)
@@ -114,24 +126,25 @@ class Student(models.Model):
 
     def __str__(self):
         """Unicode representation of Student."""
-        return f'{self.studentUser.first_name}'
+        return f'{self.studentUser.first_name} {self.gender}'
+
+
 
 
 #saves score and date when the quiz is finished
-
 class Summary(models.Model):
     """Model definition for Finished_quiz."""
     # TODO: Define fields here
     student = models.ForeignKey(Student, on_delete=models.CASCADE, null = True)
     quiz = models.ForeignKey(Quiz, on_delete =  models.CASCADE, null = True)
-    score = models.IntegerField(default = 0)
+    studentScore = models.IntegerField(default = 0)
     date_taken  = models.DateField(auto_now=True)
 
     class Meta:
         """Meta definition for Finished_quiz."""
-
         verbose_name = 'Finished_quiz'
         verbose_name_plural = 'Finished_quizzes'
+
 
     def get_totalScore(self):
         count = 0
@@ -139,7 +152,6 @@ class Summary(models.Model):
         for i in range(len(all_qns)):
             if all_qns[i].check_correct(all_qns[i].id) == True:
                 count += 1
-        self.score = count
         return count
     
     def check_passed(self):
@@ -149,7 +161,6 @@ class Summary(models.Model):
             return False
         else:
             self.student.passed += 1
-            self.student.save()
             return True
 
     def get_absolute_url(self):
@@ -194,7 +205,7 @@ class QuestionPost(models.Model):
             
 
     
-    
+
 
 #Added to show a report of every student 
 class Report(models.Model):
@@ -202,6 +213,7 @@ class Report(models.Model):
     """Model definition for Report."""
 
     # TODO: Define fields here
+    
     class Meta:
         #Added to show a report of every student 
         """Meta definition for Report."""

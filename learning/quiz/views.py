@@ -43,6 +43,18 @@ def register(request):
 # create teacher view 
 # create normal view page
 
+class studentReportView(LoginRequiredMixin, generic.ListView):
+    context_object_name = "summary_list"
+    model = Student
+    template_name = "quiz/individual_list.html"
+    
+    def get_queryset(self,  **kwargs):
+        student = self.request.user.student
+        queryset = student.summary_set.all()
+        return queryset
+        
+    
+
 
 class StudentQuizListView(LoginRequiredMixin, generic.ListView):
     context_object_name = 'quiz_list'
@@ -65,6 +77,8 @@ class StudentQuizListView(LoginRequiredMixin, generic.ListView):
 class StudentQuizDetailView(DetailView):
     model = Quiz
     template_name ='quiz/quiz_detail.html'
+
+    
 
 class QuestionQuizListView(ListView):
     context_object_name = 'question_list'
@@ -135,19 +149,14 @@ class ResultListView(ListView):
     context_object_name = "result_list"
     template_name ='quiz/result_list.html'
 
+    
+
 class ResultDetailView(DetailView):
     model = Summary
     context_object_name = "result_detail"
     template_name = 'quiz/result_detail.html'
 
     # we use get_context_data
-    def get_context_data(self, **kwargs):
-        student = self.request.user.student
-        get_student = Summary.objects.get(pk = student.id)
-        context = super(ResultDetailView,self).get_context_data(**kwargs)
-        queryset = get_student.get_totalScore()
-        context["result_score"] = queryset 
-        return context
     
 
 

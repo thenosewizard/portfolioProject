@@ -7,11 +7,11 @@
 <h1>Working</h1>
 <h1>Student profile</h1>
 
-Name: {{result_detail}}
+Name: {{result_detail.student}}
 <br><br>
 Quiz taken: {{result_detail.quiz}}
-
-Score: {{result_score}}
-
-passed: 
+<br><br>
+Score: {{result_detail.studentScore}}
+<br><br>
+passed:  {{result_detail.passed}}
 {%endblock content%}
