@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+
+
+
+{%block content%}
+
+<h1>Working</h1>
+<h1>Student profile</h1>
+
+Name: {{result_detail.student}}
+<br><br>
+Quiz taken: {{result_detail.quiz}}
+<br><br>
+Score: {{result_detail.get_totalScore}}
+<br><br>
+passed:  {{result_detail.check_passed}}
+{%endblock content%}

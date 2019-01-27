@@ -4,16 +4,14 @@
 {%block content%}
 
 <h1>Working</h1>
-{% if quiz_list%}
+{% if question_list%}
 <ul>
-    {% for quiz in quiz_list%}
-    <li><a href ="{{quiz.get_absolute_url}}">{{quiz}}</a></li>
+    {% for question in question_list%}
+    <li><a href="{% url 'question-detail' question.id %}">{{question.question_text}}</a></li>
     {% endfor %}
 </ul>
 {% else %}
 <p>There are no more books in the library</p>
 {% endif %}
 {%endblock content%}
-
-
 

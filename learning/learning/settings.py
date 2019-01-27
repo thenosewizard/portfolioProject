@@ -38,7 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'quiz.apps.QuizConfig', 
+    'import_export',
 ]
+
+IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -124,5 +127,3 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 #redirects user to home page once sucessfully logged in 
 LOGIN_REDIRECT_URL = '/'
-
-AUTH_USER_MODEL = 'quiz.User'

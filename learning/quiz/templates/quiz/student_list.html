@@ -1,0 +1,22 @@
+{%extends 'base.html'%}
+
+
+
+{%block content%}
+
+<h1>Working</h1>
+
+
+{{user.is_student}}
+
+<h1>Student profile</h1>
+{% if student_list %}
+    <li>
+        {% for student in student_list%}
+        <a href="" >{{student.student}}</a>
+        {%endfor%}
+    </li>
+{% else %}
+<p>There are no summaries avalaible</p>
+{% endif %}
+{%endblock content%}

@@ -1,0 +1,24 @@
+{%extends 'base.html'%}
+
+
+
+{%block content%}
+
+<h1>Working</h1>
+
+
+{{user.is_student}}
+
+<h1>Student profile</h1>
+{% if result_list %}
+{% for student in result_list%}
+    Quiz taken: {{student.student}} 
+        <li>
+            <a href="{{student.get_absolute_url}}" >{{student.quiz}}</a>
+        </li>
+        <br>
+    {%endfor%}
+{% else %}
+<p>There are no summaries avalaible</p>
+{% endif %}
+{%endblock content%}
