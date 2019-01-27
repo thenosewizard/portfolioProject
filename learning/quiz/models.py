@@ -9,6 +9,7 @@ from django.core.validators import MaxValueValidator
 import csv
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
+from import_export import resources,widgets
 
 #from django.utils.translation import ugettext as _
 #from django.utils.timezone import now
@@ -225,3 +226,23 @@ class Report(models.Model):
     def __str__(self):
         """Unicode representation of Report."""
         pass
+
+
+
+class machineLearn(models.Model):
+    sex = models.CharField( max_length=50)
+    age = models.IntegerField(default = 0)
+    travelTime = models.IntegerField(default = 1)
+    studytime = models.IntegerField(default = 0)
+    failures = models.IntegerField(default = 0)
+    schoolsup = models.CharField(max_length=3)
+    activities = models.CharField(max_length= 3)
+    higher = models.CharField(max_length= 3)
+    freetime = models.IntegerField(default = 0)
+    absences = models.IntegerField(default = 0)
+    passed = models.CharField(max_length=3)
+
+    
+
+    #def __str__(self):
+    #    pass
