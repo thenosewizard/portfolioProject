@@ -195,12 +195,6 @@ class QuestionPost(models.Model):
         else:
             return True
 
-    #def save(self, *args, **kwargs):
-
-     #   if QuestionPost.objects.get(Question.id).exists() and not self.pk:
-      #      raise ValidationError('There can only be one Questionpost obj')
-       # return super(QuestionPost, self).save(*args, **kwargs)
-
     def __str__(self):
        return f'Question: {self.questionDone} Ans:({self.post})'
             
@@ -246,10 +240,15 @@ class machineLearn(models.Model):
     ordering = ['id','sex','age','travelTime','studytime','failures','schoolsup','activities','higher','freetime','absences','passed']
     #def __str__(self):
     #    pass
-
+    
+# use this to dump the data into this model
 class pumpModel(models.Model):
     needHelp = models.CharField(max_length= 100)
 
     def __str__(self):
         return f'{self.id} [{self.needHelp}]'
+    
+    def get_absolute_url(self):
+        from django.core.urlresolvers import reverse
+        return reverse('', kwargs={'pk': self.pk})
     

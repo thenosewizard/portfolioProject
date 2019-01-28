@@ -12,13 +12,12 @@ def pump_into_model(pump_row):
     reuslt.save()
 
 if __name__ == "__main__":
+    response = input("Would you like to clear the database? [y/n]")
+    if response == "y":
+        pumpModel.objects.all().delete()
     let = predict()
-    #print(let)
-
     test = []
-
     for i in range(len(let)):
         test.append(let[i])
         pump_into_model(let[i])
                     
-    #print(len(test))

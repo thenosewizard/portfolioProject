@@ -159,15 +159,25 @@ class ResultDetailView(DetailView):
     # we use get_context_data
     
 # view to display the reports 
-class ReportView(DetailView):
+class ReportAnalyticsView(ListView):
+    model = pumpModel
+    context_object_name = "need_list"
+    template_name = "quiz/report_list.html"
+    
+
+#generate quiz view 
+#assign quiz to students
+class RequestQuizView(ListView):
     pass
-        
-
-      
-
     
-    
+class generateStudyView(ListView):
+    pass
 
+class DetailStudyView(ListView):
+    pass
+    
+class StrengthAndWeakness(ListView):
+    pass
 
 
 # this view
