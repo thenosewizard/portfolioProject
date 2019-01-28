@@ -228,7 +228,7 @@ class Report(models.Model):
         pass
 
 
-
+#to test the machine learning model
 class machineLearn(models.Model):
     sex = models.CharField( max_length=50)
     age = models.IntegerField(default = 0)
@@ -243,6 +243,13 @@ class machineLearn(models.Model):
     passed = models.CharField(max_length=3)
 
     
-
+    ordering = ['id','sex','age','travelTime','studytime','failures','schoolsup','activities','higher','freetime','absences','passed']
     #def __str__(self):
     #    pass
+
+class pumpModel(models.Model):
+    needHelp = models.CharField(max_length= 100)
+
+    def __str__(self):
+        return f'{self.id} [{self.needHelp}]'
+    

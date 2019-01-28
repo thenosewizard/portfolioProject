@@ -158,8 +158,9 @@ class ResultDetailView(DetailView):
 
     # we use get_context_data
     
-
-
+# view to display the reports 
+class ReportView(DetailView):
+    pass
         
 
       
