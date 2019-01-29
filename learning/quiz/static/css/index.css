@@ -1,0 +1,15 @@
+﻿#my-carousel{
+    width:80%;
+    margin:auto;
+    margin-top:5%;
+    margin-bottom:5%;
+}
+
+.grid{
+    display:grid;
+    grid-template:auto/25% 25% 25% 25%;
+    margin-left:10%;
+    margin-right:10%;
+    text-align:center;
+    margin-bottom:5%;
+}

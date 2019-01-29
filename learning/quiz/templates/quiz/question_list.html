@@ -2,16 +2,42 @@
 
 
 {%block content%}
+{% load static %}
 
-<h1>Working</h1>
+
 {% if question_list%}
-<ul>
-    {% for question in question_list%}
-    <li><a href="{% url 'question-detail' question.id %}">{{question.question_text}}</a></li>
+
+<div class="about">
+        <div>
+            <img src=" {% static './media/images/Python.png' %}" width="52%" />
+        </div>
+        <div>
+            <h2 class="info">Quiz Attempt</h2>
+            <br />
+            <p class="info">
+                Atempt all questions shown in this page. Ensure that you read each and every question carefully before attempting
+            </p>
+        </div>
+    </div>
+<br><br>
+
+<hr size = "30">
+
+<h4 class="text-center">Questions for this Quiz</h4>
+<ul class="list-group"  style ="margin-left:auto; margin-right: auto; width: 50%">
+    {% for question in question_list %}
+    <li class = "list-group-item" style = "padding:2em;">
+        <a href="{% url 'question-detail' question.id %}">{{question.question_text}}</a>
+    </li>
+    <li class = "list-group-item" style = "padding:2em;">
+        <span class="badge">{{question.sub_category}}</span>
+    </li>
+            
     {% endfor %}
 </ul>
+<br><br><br><br><br>
 {% else %}
-<p>There are no more books in the library</p>
+<p>There are no questions assigned to this quiz</p>
 {% endif %}
 {%endblock content%}
 

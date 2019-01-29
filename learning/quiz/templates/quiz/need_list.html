@@ -1,0 +1,22 @@
+{%extends 'base.html'%}
+
+
+
+{%block content%}
+<br><br>
+<br><br>
+<h2 class="text-center">Help needed</h2>
+<ul class="list-group "  style ="margin-left:auto; margin-right: auto; width: 50%; ">
+    {% for need in need_list%}
+        <li class= "list-group-item" style = "padding: 2em;">Name of Student: {{need.student}} 
+        <br><br>        
+        <hr>
+        Help needed: {{need.help_needed}}
+    </li>
+    {% endfor %}
+</ul>
+
+<br><br>
+<br><br>
+
+{%endblock content%}

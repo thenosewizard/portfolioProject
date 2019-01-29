@@ -1,0 +1,17 @@
+
+{% extends 'base.html' %}
+
+
+{%block content%}
+
+<h1>Working</h1>
+{% if need_list%}
+<ul>
+    {% for help in need_list%}
+        <li>{{help.id}} {{help.needHelp}}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>There are no more books in the library</p>
+{% endif %}
+{%endblock content%}

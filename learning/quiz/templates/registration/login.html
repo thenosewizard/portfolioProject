@@ -1,3 +1,4 @@
+{% load static%}
 <!DOCTYPE html>
 <html>
 <head>
@@ -6,6 +7,8 @@
     <title>Page Title</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <link rel="stylesheet" href='{% static "./css/login.css" %}' />
+    <script src="https://www.w3schools.com/lib/w3.js"></script>
     <script src="main.js"></script>
 </head>
 <body>
@@ -20,17 +23,23 @@
     <h1>Welcome to OwlLearning</h1>
     <form method="POST" action="{% url 'login' %}">
         {% csrf_token %}
-
-        <label>Username: </label> {{form.username}}<br><br>
-        <label>Password: </label> {{form.password}}
-
+        <h3>Log In</h3>
+        <fieldset>
+            <label>Username: </label>
+            {{form.username}} <br />
+            <br>
+            <label>Password: </label>
+            {{form.password}} <br />
+        </fieldset>
         <p>
+            <input checked type="checkbox" id="rememberacc" />Remember me <br /><br />
             <input type="submit"= value = "login">
+            <button class="btn btn-default" type="reset">Reset</button>
         </p>
         <input type="hidden" name="next" value="{{next}}">
-
-
+        
     </form>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 </body>
 </html>

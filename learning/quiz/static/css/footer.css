@@ -1,0 +1,38 @@
+﻿body{
+    margin:0;
+}
+footer{
+    border-top: 5px groove black;
+    height:20%;
+    background-color:white;
+    color:dimgray;
+    display:grid;
+    grid-template: auto / 40% 60%;
+}
+
+footer > div{
+    margin-top:3%;
+    margin-bottom:3%;
+    text-align:center;
+    padding:2%;
+}
+
+#ldiv{
+    border-right: 1px ridge black;
+}
+
+p {
+    text-align:left;
+    padding: 10%;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+table{
+    text-align:center;
+}
+
+th, td{
+    text-align:center;
+    width:20%;
+}

@@ -1,0 +1,60 @@
+﻿.table-responsive{
+    width:80% !important;
+}
+
+table{
+    margin-left:18%;
+    width:80% !important;
+    margin-bottom:5% !important;
+    
+}
+
+.about{
+    margin-top:5%;
+    display:grid;
+    width:80%;
+    margin-left:18%;
+    grid-template:auto/ 20% 80%;
+}
+
+.info{
+    text-align:left !important;
+    padding:0;
+
+}
+
+#courses-info{
+    width:80%!important;
+    margin-left:18%!important;
+}
+
+.question-info{
+    width:80%;
+    margin-left:18%;
+    margin-top:5%;
+}
+
+.question{
+    border:1px groove black;
+    border-radius:5px 5px;
+}
+
+.answer{
+    width:80%;
+    margin-left:18%;
+    margin-bottom:5%;
+}
+
+fieldset{
+    border:1px groove black;
+}
+
+
+.RNG{
+    width:50%;
+    margin: 0 auto;
+    border:groove 1px grey;
+    padding:5%;
+    margin-bottom:5%;
+    margin-top:5%;
+}

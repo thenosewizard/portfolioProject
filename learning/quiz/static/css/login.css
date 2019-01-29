@@ -1,0 +1,41 @@
+﻿body
+{
+    background-image:url("../media/images/bg.jpg");
+    background-size:cover;
+    background-repeat:repeat-y;
+    color:dimgray;
+    margin:0;
+}
+form {
+    width: 50%;
+    height: auto;
+    margin: auto;
+    margin-top:5%;
+    margin-bottom:5%;
+    padding: 5%;
+    padding-top: 3%;
+    border: solid 1px black;
+    text-align:center;
+    box-shadow:5px 5px 5px black;
+    background-color:white;
+}
+label{
+    width:100%;
+}
+
+input{
+    right:5%;
+}
+
+fieldset{
+    padding:25%;
+    padding-top:1%;
+    padding-bottom:1%;
+    text-align:center;
+}
+
+h3{
+    margin:0;
+    margin-bottom:4%;
+    text-decoration:underline dashed;
+}

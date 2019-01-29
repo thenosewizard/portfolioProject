@@ -2,11 +2,12 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from . import views
+import random
 from django.contrib.auth.mixins import LoginRequiredMixin
 from quiz.models import *
 from django.views import generic
 from django.views.generic import TemplateView, ListView, DetailView
-from quiz.forms import QuestionForm
+from quiz.forms import QuestionForm, RequestQuizForm
 from django.shortcuts import get_list_or_404, get_object_or_404
 from django.http import HttpResponseRedirect
 #from quiz.models import *
@@ -61,7 +62,6 @@ class StudentQuizListView(LoginRequiredMixin, generic.ListView):
     model = Student
 
     template_name ='quiz_list.html'
-    paginate_by = 5
     def get_queryset(self, **kwargs):
         student = self.request.user.student
         queryset = student.assigned_quizzes.all()
@@ -134,11 +134,14 @@ class QuestionQuizDetailView(DetailView):
             QuestionPost.questionDone = get_object_or_404(Question, pk= self.kwargs['pk'])
             QuestionPost.save()
 
+
             answer = form.cleaned_data['post']
             form = QuestionForm()
+            #return redirect('quiz-detail', pk= QuestionPost.questionDone.quiz_assigned.id )
+            return redirect('question-list', pk= QuestionPost.questionDone.quiz_assigned.id )
         arg = {'form': form, 'answer': answer}
+        #return HttpResponseRedirect(reverse('quiz-detail'))
         return render(request, self.template_name, arg)
-        #return HttpResponseRedirect(reverse('question-list'))
     #def get_data(self, request):
     #    return render(request, self.template_name, {'form':form})
     
@@ -151,22 +154,119 @@ class ResultListView(ListView):
 
     
 
+
+# here is where students see their strength and weaknesses
 class ResultDetailView(DetailView):
     model = Summary
     context_object_name = "result_detail"
     template_name = 'quiz/result_detail.html'
 
+#    def get_queryset(self):
+#        get = Summary.objects.filter(pk = self.kwargs.get('pk'))
+#        weak = get.get_weakness
+#        stren = get.get_strength
+
+        #query = {'weak': weak, 'strength': stren}
+        #return query
+
+    def get_context_data(self, **kwargs):
+        context = super(ResultDetailView ,self).get_context_data(**kwargs)
+        get = Summary.objects.get(pk = self.kwargs.get('pk'))
+        list_weak = get.get_weakness()
+        list_str = get.get_strength()
+
+        weak = ""
+        strengths = ""
+        for i in range(len(list_weak)):
+            weak += list_weak[i]
+
+        for i in range(len(list_str)):
+            strengths += list_str[i]
+
+        context = {'weak': weak, 'strengths': strengths, 'name': get.student, 'passed':get.check_passed, 'quiz':get.quiz, 'score': get.get_totalScore}
+        return context
+    
+    
     # we use get_context_data
     
-
-
-        
-
-      
-
+# view to display the reports 
+class ReportAnalyticsView(ListView):
+    model = identify
+    context_object_name = "need_list"
+    template_name = "quiz/need_list.html"
     
     
 
+
+#generate quiz view 
+#assign quiz to students 
+class RequestQuizView(TemplateView):
+    template_name = "quiz/requestQuiz_list.html"
+
+    def get(self, request, *args, **kwargs):
+        form = RequestQuizForm()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request, *args, **kwargs):
+        form = RequestQuizForm(request.POST)
+
+        if form.is_valid():
+            choice = form.cleaned_data['sub_topic_name']
+            choice = dict(form.fields['sub_topic_name'].choices)[choice]
+            form = RequestQuizForm()
+
+            current_student = self.request.user.student
+            student = Student.objects.get(pk = current_student.id)
+
+            category = subTopic.objects.get(sub_topic_name = choice)
+            subject_get = category.topic
+            questions = Question.objects.filter(sub_category = category.id)
+            
+
+            # check if user is [yes] or [no]
+            student_help = identify.objects.get(student = current_student)
+            check_help = student_help.help_needed
+
+            num_questions = 0
+            if check_help == 'yes':
+                num_questions = 3
+            else:
+                num_questions = 2
+
+
+            #generating a random quiz number to identify it
+            number = random.randint(0, 1000000)
+            # getting the questions that are not assigned to any quizzes
+            question_list = []
+            for i in range(len(questions)):
+                # to prevent the user from getting all the qns and to keep his/her workload easy
+                if not questions[i].quiz_assigned:
+                    if len(question_list) > num_questions:
+                        break
+                    else:
+                        question_list.append(questions[i])
+
+            new_quiz = Quiz(quiz_name = f'{number}', topic = subject_get, pass_mark = len(question_list)/2)
+            new_quiz.save()
+
+            for i in range(len(question_list)):
+                question_list[i].quiz_assigned = new_quiz
+                question_list[i].save()
+            
+            student.assigned_quizzes.add(Quiz.objects.get(pk = new_quiz.id)) 
+
+            #return redirect('index')
+            args = {'form': form, 'choice':choice}
+        return render(request, self.template_name, args)
+    
+class generateStudyView(ListView):
+    pass
+
+class DetailStudyView(ListView):
+    pass
+    
+class StrengthAndWeakness(ListView):
+    pass
 
 
 # this view

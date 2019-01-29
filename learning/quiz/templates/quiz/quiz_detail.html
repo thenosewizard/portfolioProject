@@ -1,13 +1,24 @@
 {% extends 'base.html' %}
 
 {%block content%}
+<br><br>
+<div class="card border border-right-0" style="width: 40%; margin: 0 auto; border: 1px solid black; padding: 1em;">
+  <h3>Topic: {{quiz.topic}}</h3>
+  <div class="card-body">
+    <h3 class="card-title">Quiz Name: {{quiz.quiz_name}}</h3>
+    <p class="card-text"></p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Name: {{quiz.quiz_name}}</li>
+    <li class="list-group-item">Description: {{quiz.description}}</li>
+    <li class="list-group-item bg-warning">Passing mark: {{quiz.pass_mark}}</li>
+  </ul>
+  <div class="card-body">
+    <a href="{% url 'question-list' quiz.id %}" class="card-link">Proceed to Quiz</a>
+  </div>
+</div>
+<br><br><br>
+<br><br>
 
-<h1>Name = {{quiz.quiz_name}}</h1>
-<br>
-<h3>Description: {{quiz.description}}</h3>
-
-<h4>Passing Mark: {{quiz.pass_mark}}</h4>
-
-<h4>Go to quiz: <a href = "{% url 'question-list' quiz.id %}">Go to quiz</a></h4>
 {%endblock content%}
 

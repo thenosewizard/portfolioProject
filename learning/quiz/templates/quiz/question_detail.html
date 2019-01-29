@@ -5,22 +5,47 @@
 
 
 <div>
-    {{question_select.question_text}}
-    <ol>
-        <!--Printing out the answers-->
-        {% for answer in question_select.answer_set.all%}
-        <li>
-             <a href="" >{{ answer.content_answer }}</a>
-        </li>
-        {%endfor%}
-    </ol>
-    <form method = "post">
-        {%  csrf_token  %}
-        {{ form.as_p }} 
-        <button type="submit">Submit</button>
+    <!--
+        <ol>
+            Printing out the answers
+            {% for answer in question_select.answer_set.all%}
+            <li>
+                <a href="" >{{ answer.content_answer }}</a>
+            </li>
+            {%endfor%}
+        </ol>
+    -->
+    <form style ="width: 50%; margin: auto;">
+        
+    </form>
+    
+    
+    
+    <form class="" method = "post" style ="width: 50%; margin: auto;">
+        <br><br>
+        <div class="question-info">
+            <h3>Question</h3>
+            <hr>
+            <h4>
+                {{question_select.question_text}}
+            </h4>
+                <br><br>
+                {%  csrf_token  %}
+                {{ form }} 
+                <button type="submit">Submit</button>
+                <br><br>
+                    <!--
+
+                -->
+        </div>
     </form>
     <br><br>
-    <button><a href="{{ question_select.quiz_assigned.get_absolute_url }}">Back to questions</a></button>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
+    <br><br>
 </div>
 
 {% endblock content %}

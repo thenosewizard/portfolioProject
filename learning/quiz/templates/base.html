@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -9,16 +10,88 @@
         <title>Base template</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="">
+        <link rel="stylesheet" href= '{%static "./css/courses.css"%}' />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href='{%static "css/footer.css" %}'/>
+        <link rel="stylesheet" href='{% static "css/index.css" %}' />
+        <link rel="stylesheet" href='{% static "css/nav.css" %}' />
+
     </head>
     <body>
         <!--Include nav bar here -->
-        <h1>Hello</h1>
+        <header>
+            <nav>
+    
+                <a href="index.html">
+                    <img class="logo" src= '{% static "/media/images/logo.jpg" %}' />
+                </a>
+                
+                    
+                <!-- Add a toggle button -->
+                <input type="checkbox" id="toggle">
+                <!-- &#9776; is the Unicode for displaying 3 horizontal lines -->
+                <label for="toggle" id="toggleButton">&#9776;</label>
+                <!-- Hyperlinks for the navigation bar -->
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'quiz-list' %}">My Quizzes</a></li>
+                    <li><a href="{% url 'individual-list' %}">My Performace</a></li>
+                    <li><a href="{% url 'requestQuiz-list'%}">Get Quizzes</a></li>
+                    <li><a href="{% url 'result-list'%}">Student Summary</a></li>
+                    <li><a href="{% url 'need-list'%}">Student Aid</a></li>
+           
+                    <li><a href="about.html">About us</a></li>
+                </ul>
+            </nav>
+        </header>
         {% block content %}
         <!--Content for the rest of the website goes here in other templates-->
         {% endblock %}
-
         <!--Include footer here-->
+        <footer>
+            <div id="ldiv">
+                    <h3>Sign Up For Our Newsletter!</h3>
+                    <form class="navbar-form navbar-center" action="/action_page.php">
+                        <div class="form-group">
+                            <input type="email" class="form-control" placeholder="Enter Your Email">
+                        </div>
+                        <button type="submit" class="btn btn-warning">Subscribe!</button>
+                    </form>
+                    <p>For our latest updates, subscribe to our newsletter! 
+                    You will get to know all our latest action and new features!</p>
+                </div>
+                <div>
+                    <table>
+                        <tr>
+                            <th><a href="index.html">Home</a></th>
+                            <th><a href="">Account</a></th>
+                            <th><a href="about.html">About Us</a></th>
+                        </tr>
+                        <tr>
+                            <td><a href="">Majors</a></td>
+                            <td><a href="login.html">Log In</a></td>
+                            <td><a href="https://www.np.edu.sg/Pages/default.aspx">Our School</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="courses.html">Courses</a></td>
+                            <td><a href="password.html">Forget Password</a></td>
+                            <td><a href="http://eportfolio.ict.np.edu.sg/home/">Our Portfolio</a></td>
+                        </tr>
+                        <tr>
+                            <td><a href="">Tests</a></td>
+                            <td><a href="profile.html">Profile</a></td>
+                            <td><a href="mailto: s10185799@connect.np.edu.sg">Our Email</a></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><a href="report.html">Report</a></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+        </footer>
         <script src="" async defer></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
     </body>
 </html>
