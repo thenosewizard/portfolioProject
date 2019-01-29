@@ -8,9 +8,9 @@
     <form method = "post" class ="text-center">
         {%  csrf_token  %}
         <span >
-                {{ form}} 
-
-                <button type="submit">Submit</button>
+                {{form.as_table}} 
+                <br><br>    
+                <button type="submit" class ="btn btn-success">Submit</button>
             </span>
             <br><br>
             You have selected:<br><br> 
