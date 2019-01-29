@@ -137,9 +137,11 @@ class QuestionQuizDetailView(DetailView):
 
             answer = form.cleaned_data['post']
             form = QuestionForm()
+            #return redirect('quiz-detail', pk= QuestionPost.questionDone.quiz_assigned.id )
+            return redirect('question-list', pk= QuestionPost.questionDone.quiz_assigned.id )
         arg = {'form': form, 'answer': answer}
-        return HttpResponseRedirect(reverse('question-list'))
-        #return render(request, self.template_name, arg)
+        #return HttpResponseRedirect(reverse('quiz-detail'))
+        return render(request, self.template_name, arg)
     #def get_data(self, request):
     #    return render(request, self.template_name, {'form':form})
     
