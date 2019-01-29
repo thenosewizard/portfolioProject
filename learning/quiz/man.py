@@ -17,18 +17,11 @@ django.setup()
 
 
 # Load data
-#data = pd.read_csv("C:/Users/abich/OneDrive/Desktop/student-data-edited.csv")
-#data = pd.read_csv("C:\\Users\\abich\\Documents\\owlLearning\\learning\\data\\student-data-edited.csv")
-#data = pd.read_csv("C:/Users/aishw/Desktop/student-data-edited.csv")
+
 
 
 def predict():
     data = pd.DataFrame.from_records(machineLearn.objects.all().values())
-    #data = pd.DataFrame(list(machineLearn.objects.all().values()))
-
-
-    #data = data[['id','sex','age','travelTime','studytime','failures','schoolsup','activities','higher','freetime','absences','passed']]
-
     data = data[['id','sex','age','travelTime','studytime','failures','schoolsup','activities','higher','freetime','absences','passed']]
 
 
@@ -60,20 +53,17 @@ def predict():
 
     # Preprocess feature columns
     def preprocess_features(X):
-        outX = pd.DataFrame(index=X.index)  # output dataframe, initially empty
+        outX = pd.DataFrame(index=X.index) 
 
-        # Check each column
         for col, col_data in X.iteritems():
-            # If data type is non-numeric, try to replace all yes/no values with 1/0
             if col_data.dtype == object:
                 col_data = col_data.replace(['yes', 'no'], [1, 0])
-            # Note: This should change the data type for yes/no columns to int
 
-            # If still non-numeric, convert to one or more dummy variables
             if col_data.dtype == object:
-                col_data = pd.get_dummies(col_data, prefix=col)  # e.g. 'school' => 'school_GP', 'school_MS'
-
-            outX = outX.join(col_data)  # collect column(s) in output dataframe
+                col_data = pd.get_dummies(col_data, prefix=col) 
+            
+            #output
+            outX = outX.join(col_data)  
 
         return outX
 
