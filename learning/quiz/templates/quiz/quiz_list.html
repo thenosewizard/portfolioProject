@@ -3,11 +3,11 @@
 
 {%block content%}
 
-<h1>Working</h1>
 {% if quiz_list%}
-<ul>
+<h2 class="text-center">List of quizzes</h2>
+<ul class="list-group "  style ="margin-left:auto; margin-right: auto; width: 50%; ">
     {% for quiz in quiz_list%}
-    <li><a href ="{{quiz.get_absolute_url}}">{{quiz}}</a></li>
+        <li class= "list-group-item" style = "padding: 2em;"><a href ="{{quiz.get_absolute_url}}">Quiz name: {{quiz}}</a><span class="badge">{{quiz.topic}}</span></span></li>
     {% endfor %}
 </ul>
 {% else %}

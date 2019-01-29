@@ -1,12 +1,20 @@
 
 import os
 import sys
+import django
+from django.db import models
 from quiz.models import machineLearn
 # Import necessary libraries
 import numpy as np
 import pandas as pd
 
-from .models import machineLearn, Student
+from django.apps import apps
+from .models import machineLearn,Student, identify
+# In[4]:
+# Setup django apps to access models in standalone script
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "learning.settings")
+django.setup()
+
 
 # Load data
 #data = pd.read_csv("C:/Users/abich/OneDrive/Desktop/student-data-edited.csv")
@@ -17,7 +25,12 @@ from .models import machineLearn, Student
 def predict():
     data = pd.DataFrame.from_records(machineLearn.objects.all().values())
     #data = pd.DataFrame(list(machineLearn.objects.all().values()))
+
+
+    #data = data[['id','sex','age','travelTime','studytime','failures','schoolsup','activities','higher','freetime','absences','passed']]
+
     data = data[['id','sex','age','travelTime','studytime','failures','schoolsup','activities','higher','freetime','absences','passed']]
+
 
     # In[5]:
 
@@ -182,7 +195,41 @@ def predict():
     print(compute_auc(np.array(yTest),y_pred_RF))
 
     #Predicted Values from chosen model:
-    print(y_pred_RF)
-    print(len(y_pred_RF))
+    #print(y_pred_RF)
 
-    return y_pred_RF
+
+
+
+
+
+    
+    print("Predicting new stuff")
+    xNew = pd.DataFrame.from_records(Student.objects.all().values())
+
+
+    # finding the students
+    studentID = xNew['id']
+    student_details = []
+
+    for i in range(len(studentID)):
+        student_details.append(studentID[i])
+    print(student_details)
+
+    xNew = xNew[['sex','age','travelTime','studytime','schoolsup','activities','higher','freetime','absences','passed']]
+    g = preprocess_features(xNew)
+    y_new_pred = clf_RF.predict(g)
+
+    #locating the students and adding the results to them/ creating a new instance
+    for i in range(len(student_details)):
+        student = Student.objects.get(id = student_details[i])
+        try:
+            found = identify.objects.get(student = student)
+            found.help_needed = y_new_pred[student_details.index(student.id)]
+            found.save()
+        except:
+            found = identify(student = student, help_needed = y_new_pred[student_details.index(student.id)])
+            found.save()
+
+
+    print(y_new_pred)
+

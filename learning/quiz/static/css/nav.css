@@ -1,0 +1,103 @@
+﻿.logo{
+    margin-top:1%;
+    width:10%;
+    height:10%;
+}
+header {
+    color: black;
+    text-align: center;
+
+}
+body{
+    margin:0px;
+}
+
+nav {
+    font-family: Consolas;
+    background-color: white;
+    border-bottom:5px groove black;
+}
+
+nav ul li a:link, nav ul li a:visited {
+    color: black;
+}
+
+nav ul li a:focus, nav ul li a:hover {
+    color: grey;
+    background-color: black;
+}
+
+nav ul li a:active {
+    color: black;
+    background-color: grey;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+nav ul li {
+    font-size: .8em;
+    text-transform: uppercase;
+    letter-spacing: .2em;
+}
+
+nav ul li a {
+    display: block;
+    text-decoration: none;
+    padding: .5em 1em;
+    margin: .5em; 
+}
+
+#toggle, #toggleButton {
+    display: none;
+    position:absolute;
+    color: white;
+    background-color: black;
+    padding: .25em 0.85em;
+    margin: .35em;
+    top:0%;
+    right:0%;
+}
+@media screen and (max-width:1400px){
+    
+    header {
+        width: 100%;
+    }
+
+    footer {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    header p {
+        display: none;
+        transition: all 0.2s ease-in-out;
+    }
+
+    nav ul li {
+        display: none;
+    }
+
+    #toggleButton {
+        display: block;
+        cursor: pointer;
+    }
+
+    input#toggle:checked ~ ul li {
+        display: block;
+        width: 100%;
+    }
+    header{
+        width:100%;
+    }
+    footer{
+        width:100%;
+    }
+}

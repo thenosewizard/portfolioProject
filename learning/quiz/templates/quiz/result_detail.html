@@ -4,14 +4,22 @@
 
 {%block content%}
 
-<h1>Working</h1>
-<h1>Student profile</h1>
+<div class="card" style="width: 50%; margin: 0 auto; ">
+        <div class="card-body">
+          <h2 class="card-title">Review on: {{quiz}}</h2>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Name: {{name}}</li>
+          <li class="list-group-item">Quiz Taken: {{quiz}}</li>
+          <li class="list-group-item">Score: {{score}}</li>
+          <li class="list-group-item">passed:  {{passed}}</li>
+          <li class="list-group-item">Strengths:{{strengths}}</li>
 
-Name: {{result_detail.student}}
-<br><br>
-Quiz taken: {{result_detail.quiz}}
-<br><br>
-Score: {{result_detail.get_totalScore}}
-<br><br>
-passed:  {{result_detail.check_passed}}
+          <li class="list-group-item">Weakness: {{weak}}  </li>
+        </ul>
+       
+      </div>
+
+      <br><br><br><br></br><br><br>
+
 {%endblock content%}

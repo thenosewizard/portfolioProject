@@ -4,20 +4,25 @@
 
 {%block content%}
 
-<h1>Working</h1>
 
 
 {{user.is_student}}
+<br><br>
 
-<h1>Student profile</h1>
+<h1 class ="text-center" >Summary of quizzes  taken by students</h1>
+
 {% if result_list %}
+<ul class="list-group "  style ="margin-left:auto; margin-right: auto; width: 50%; ">
 {% for student in result_list%}
-    Quiz taken: {{student.student}} 
-        <li>
+    <li class= "list-group-item" style = "padding: 2em;">
+        Quiz taken: {{student.student}} 
+    </li>
+    <li class= "list-group-item" style = "padding: 2em;">
             <a href="{{student.get_absolute_url}}" >{{student.quiz}}</a>
         </li>
         <br>
     {%endfor%}
+</ul>
 {% else %}
 <p>There are no summaries avalaible</p>
 {% endif %}

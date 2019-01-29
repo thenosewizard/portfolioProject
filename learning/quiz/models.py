@@ -7,6 +7,7 @@ from django.contrib.auth.models import AbstractUser
 from django.core.exceptions import ValidationError, ImproperlyConfigured
 from django.core.validators import MaxValueValidator
 import csv
+from django import forms
 from django.http import HttpResponse
 from django.core.exceptions import PermissionDenied
 from import_export import resources,widgets
@@ -29,7 +30,7 @@ class Subject(models.Model):
 
 class subTopic(models.Model):
     sub_topic_name = models.CharField(max_length=50, )
-    topic =  models.ForeignKey(Subject, on_delete=models.CASCADE)
+    topic =  models.ForeignKey(Subject, on_delete= models.SET_NULL, null = True)
 
     def __str__(self):
         return f'{self.sub_topic_name} ({self.topic})'
@@ -57,10 +58,13 @@ class Quiz(models.Model):
     
 
 class Question(models.Model):
-    sub_category = models.ForeignKey(subTopic, on_delete = models.SET_NULL, null = True)
+    sub_category = models.ForeignKey(subTopic, on_delete = models.SET_NULL, null = True, blank = True)
     question_text = models.CharField(max_length=500, verbose_name = ("Question"))
-    quiz_assigned = models.ForeignKey(Quiz, on_delete = models.CASCADE, null = True)
+    quiz_assigned = models.ForeignKey(Quiz, on_delete = models.SET_NULL, null = True, blank=True)
 
+    DIFF_CHOICES = (('Easy', 'Easy'),('Intermediate', 'Intermediate'),('Hard', 'Hard'))
+
+    difficulty = models.CharField(choices = DIFF_CHOICES, max_length=50, blank = True)
     #checks if the ans is correct
     def check_correct(self, guessed):
         answer_set = Answer.objects.get(id = guessed)
@@ -72,7 +76,7 @@ class Question(models.Model):
 
 
     def __str__(self):
-        return f'{self.question_text} ({self.sub_category})'
+        return f'{self.question_text} [{self.sub_category}]'
 
     def get_absolute_url(self):
         return reverse("question-detail", args=[str(self.id)])
@@ -89,8 +93,8 @@ class Answer (models.Model):
     def get_absolute_url(self):
         return reverse('answer-detail', args=[str(self.id)])
 
-    def __str__(self):
-        return self.content_answer
+    #def __str__(self):
+    #    return self.content_answer
 
 
 class Student(models.Model):
@@ -109,15 +113,36 @@ class Student(models.Model):
         (F, 'Female'),
     )
 
-    gender = models.CharField(max_length = 1, choices = GENDER_SELECT, default = M)
+    HIGHER_SELECT = (
+        ('yes', 'yes'),
+        ('no', 'no'),
+    )
 
-    ranking = models.IntegerField(null = True)
+    ACTIVITIES_SELECT = (
+         ('yes', 'yes'),
+        ('no', 'no'),
+    )
+
+    SCH_SUPPORT = (
+        ('yes', 'yes'),
+        ('no', 'no')
+    )
+
+    sex = models.CharField(max_length = 1, choices = GENDER_SELECT, default = M)
+
     age = models.IntegerField(null = True)
-    travelDuration = models.IntegerField(null = True)
-    siteTimeDuration = models.IntegerField(null= True)
-    cca = models.BooleanField(null = True)
-    absence = models.IntegerField(null = True)
+    travelTime = models.IntegerField(null = True)
+    studytime = models.IntegerField(null= True)
+    higher = models.CharField(max_length = 3, choices = HIGHER_SELECT, blank = True, default = 'yes')
+    activities = models.CharField(max_length = 3, choices = ACTIVITIES_SELECT , blank = True, default = 'yes')
+    absences = models.IntegerField(null = True, blank = True)
     passed = models.IntegerField(null = True)
+    schoolsup = models.CharField(max_length = 3, choices = SCH_SUPPORT , blank = True, default = 'yes')
+    freetime = models.IntegerField(default = 0)
+
+
+    
+
 
     class Meta:
         pass
@@ -127,7 +152,7 @@ class Student(models.Model):
 
     def __str__(self):
         """Unicode representation of Student."""
-        return f'{self.studentUser.first_name} {self.gender}'
+        return f'{self.studentUser.first_name}'
 
 
 
@@ -163,6 +188,84 @@ class Summary(models.Model):
         else:
             self.student.passed += 1
             return True
+
+    # Summary.objects.all()[4].questionpost_set.all()[2].questionDone.sub_category.topic.subject_name        
+    def get_weakness(self):
+        weakness = []
+        strengths = []
+
+        topic = []
+        topic_2 = []
+        all_qns = self.questionpost_set.all()
+        for i in range(len(all_qns)):
+
+            if all_qns[i].check_correct(all_qns[i].id) == False:
+
+                getting_post = all_qns[i].questionDone.sub_category.topic.subject_name
+                weakness.append(getting_post)
+            elif all_qns[i].check_correct(all_qns[i].id):
+                getting_post = all_qns[i].questionDone.sub_category.topic.subject_name
+                strengths.append(getting_post)
+
+        try:
+            for i in range(len(weakness)):
+                if weakness.count(weakness[i]) > strengths.count(weakness[i]):
+                    if weakness[i] in topic:
+                        continue
+                    else:
+                        topic.append(weakness[i])
+                else:
+                    if weakness[i] in topic_2:
+                        continue
+                    else:
+                        topic_2.append(weakness[i])
+        except:
+            for i in range(len(weakness)):
+                if weakness[i] in topic_2:
+                        continue
+            else:
+                topic.append(weakness[i])
+
+        return topic
+    
+    def get_strength(self):
+        weakness = []
+        strengths = []
+
+        topic = []
+        topic_2 = []
+        all_qns = self.questionpost_set.all()
+        for i in range(len(all_qns)):
+
+            if all_qns[i].check_correct(all_qns[i].id) == False:
+
+                getting_post = all_qns[i].questionDone.sub_category.topic.subject_name
+                weakness.append(getting_post)
+            elif all_qns[i].check_correct(all_qns[i].id):
+                getting_post = all_qns[i].questionDone.sub_category.topic.subject_name
+                strengths.append(getting_post)
+        
+        try:
+            for i in range(len(strengths)):
+                if  strengths.count(strengths[i]) > weakness.count(strengths[i]):
+                    if weakness[i] in topic_2:
+                        continue
+                    else:
+                        topic_2.append(strengths[i])
+                else:
+                    if weakness[i] in topic:
+                        continue
+                    else:
+                        topic.append(strengths[i])
+        except:
+            for i in range(len(strengths)):
+                if strengths[i] in topic_2:
+                        continue
+                else:
+                    topic_2.append(strengths[i])
+
+        return topic_2
+
 
     def get_absolute_url(self):
         return reverse("result-detail", args=[str(self.id)])
@@ -251,4 +354,51 @@ class pumpModel(models.Model):
     def get_absolute_url(self):
         from django.core.urlresolvers import reverse
         return reverse('', kwargs={'pk': self.pk})
+
+
+#Model to identify students who need help
+class identify(models.Model):
+    HELP_OPTIONS = (
+        ('yes', 'yes'),
+        ('no', 'no')
+    )
+    student = models.OneToOneField(Student, on_delete=models.CASCADE, null = True)
+    help_needed = models.CharField(choices = HELP_OPTIONS, max_length=50, blank = True)
+
+    def __str__(self):
+        return f'{self.student} Help:[{self.help_needed}]'
     
+    def get_absolute_url(self):
+        return reverse("quiz-detail", args=[str(self.id)])
+
+
+# Study model 
+# student can request for a timetable
+class studyModel(models.Model): 
+    Student = models.ForeignKey(Student, null = True, on_delete =  models.CASCADE)
+    DAY_SELECT = (
+        ('Mon', 'Monday'),
+        ('Tue', 'Tuesday'), 
+        ('Wed', 'Wednesday'), 
+        ('Thurs', 'Thursday'), 
+        ('Fri', 'Friday'), 
+        ('Sat', 'Saturday'), 
+        ('Sun', 'Sunday')
+        )
+
+    day = models.CharField(choices = DAY_SELECT, max_length=50)
+    subject = models.ForeignKey(Subject, on_delete = models.CASCADE)
+    hours = models.PositiveIntegerField(validators =[MaxValueValidator(24)])
+
+    def get_absolute_url(self):
+        return reverse("study_detail", kwargs={"pk": self.pk})
+
+    def __str__(self):
+        return f'{self.day} {self.subject} {self.hours}'
+
+
+
+    
+
+
+

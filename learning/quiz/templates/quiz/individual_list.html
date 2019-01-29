@@ -4,19 +4,26 @@
 
 {%block content%}
 
-<h1>Working</h1>
+
 
 
 {{user.is_student}}
-
-<h1>Student profile</h1>
+<h1 class="text-center">Student profile</h1>
 {% if object_list %}
-{% for s in object_list%}
-        <li>
-            <a href="{{s.get_absolute_url}}" >{{s}}</a>
-        </li>
-        <br>
-    {%endfor%}
+<br><br>
+<hr>
+<h3 class="text-center">Quizzes Done</h3>
+<ul class="list-group"  style ="margin-left:auto; margin-right: auto; width: 50%">
+    {% for s in object_list%}
+    <li class = "list-group-item" style = "padding:2em;">
+        <a href="{{s.get_absolute_url}}" >{{s}}</a>
+    </li>
+    <li class = "list-group-item" style = "padding:2em;">
+        Date Taken:{{s.date_taken}}
+    </li>
+    <br>
+{%endfor%}
+</ul>
 {% else %}
 <p>There are no summaries avalaible</p>
 {% endif %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+
+
+<div class="RNG">
+    <form method = "post" class ="text-center">
+        {%  csrf_token  %}
+        <span >
+                {{ form}} 
+
+                <button type="submit">Submit</button>
+            </span>
+            <br><br>
+            You have selected:<br><br> 
+            {{choice}}
+        </form>
+    <br><br>
+</div>
+
+{% endblock content %}

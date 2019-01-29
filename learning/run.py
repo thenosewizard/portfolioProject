@@ -6,18 +6,7 @@ django.setup()
 from quiz.models import pumpModel
 from quiz.man import predict
 
-def pump_into_model(pump_row):
-    reuslt = pumpModel()
-    reuslt.needHelp = pump_row
-    reuslt.save()
-
 if __name__ == "__main__":
-    response = input("Would you like to clear the database? [y/n]")
-    if response == "y":
-        pumpModel.objects.all().delete()
-    let = predict()
-    test = []
-    for i in range(len(let)):
-        test.append(let[i])
-        pump_into_model(let[i])
+    predict()
+
                     
